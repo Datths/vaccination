@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
+# Welcome to this script done by Datths
 
-# ## Welcome to your notebook.
-# 
-
-# #### Run this cell to connect to your GIS and get started:
+### You must have access to the GIS API to run this script
 
 # In[1]:
 
@@ -84,7 +82,6 @@ items = gis.content.search("title:Couche Donnees Centres Vaccination Gouv")
 item = items[0]
 mylayer = item.layers[0]
 type(mylayer)
-#mylayer.properties.capabilities
 """Couche d'entité ouverte"""
 
 
@@ -92,7 +89,6 @@ type(mylayer)
 
 
 """Suppression des anciens points"""
-#mylayer.manager.truncate()
 mylayer.delete_features(where="objectid > 0")
 """La carte a été nettoyée"""
 
@@ -114,40 +110,17 @@ for i in range(nbft): #On fait tourner le code avec toutes les lignes de la data
     coord = geo[i]['coordinates'][0]# On affiche les i premières coordonnées des centres
     x = coord[0]
     y = coord[1]
-    pt = Point({"x" : x, "y" : y, "spatialReference" : {"wkid" : 4326}})# on crée le point #En mettant 3857 on a pas du tout les bons points 
-    #attribut1 = {"nom" : "c_nom","gid" : "100","tag":"test"} #On nomme les attributs ligne à remplacer par properties
+    pt = Point({"x" : x, "y" : y, "spatialReference" : {"wkid" : 4326}})# on crée le point #En mettant 3857 on a pas du tout les bons points
     attribut = pro[i] #Si les champs existent sur le layers ils vont être remplis par les données de pro[i]
     ft = Feature(attributes = attribut, geometry = pt) #On crée l'entité avec la fonction feature qui emporte la localisation et les attributs
-    #display(ft) #affiche les features nouvellement créés 1 par 1
     centres.append(ft) #On ajoute l'entité à la liste
 
-#print(centres[:2])
-#print(len(centres))
-    
-# Ne pas tenir compte des problème d'encoding dans les lignes suivantes
 """Les points ont été créés"""
-
-
-# In[9]:
-
 
 """Publication de la data"""
 add_result = mylayer.edit_features(adds = centres)
 display(add_result)
-#centres_fset = FeatureSet(features = features, geometry_type="Point", spatial_reference={'latestWkid': 4326, 'wkid': 102100})
-#{"wkid": 102100, "latestWkid": 3857}}
-
-
-# In[10]:
-
 
 """Affichage de la table pour vérification"""
 fset_edited = mylayer.query()
 fset_edited.sdf
-
-
-# In[ ]:
-
-
-
-
